@@ -28,7 +28,7 @@ class CuraConan(ConanFile):
                str(os.path.join(".conan_gen", "Cura.run.xml.jinja")),
                str(os.path.join(".conan_gen", "CuraVersion.py"))]
     base_path = pathlib.Path(__file__).parent.absolute()
-    python_requires = ["VirtualEnvironmentBuildTool/0.1@ultimaker/testing",
+    python_requires = ["VirtualEnvironmentBuildTool/0.2@ultimaker/testing",
                        "PyCharmRunEnvironment/0.1@ultimaker/testing",
                        "UltimakerBase/0.1@ultimaker/testing"]
     python_requires_extend = "UltimakerBase.UltimakerBase"
@@ -121,6 +121,8 @@ class CuraConan(ConanFile):
         # Install materials
         materials_src = pathlib.Path(os.path.join(self.dependencies['fdm_materials'].package_folder, self.dependencies["fdm_materials"].cpp_info.resdirs[0], "fdm_materials"))
         materials_dst = pathlib.Path(os.path.join(self.base_path, "resources", "materials", "fdm_materials"))
+        material_root = os.path.join(self.base_path, "resources", "materials")
+        os.makedirs(material_root, exist_ok = True)
         if os.path.exists(materials_dst):
             if materials_dst.is_symlink():
                 os.remove(materials_dst)
@@ -142,12 +144,12 @@ class CuraConan(ConanFile):
 
     def requirements(self):
         self.requires(f"Python/3.8.10@python/stable")
-        self.requires(f"charon/5.0.0@ultimaker/testing")
-        self.requires(f"pynest2d/5.0.0@ultimaker/testing")
-        self.requires(f"savitar/5.0.0@ultimaker/testing")
-        self.requires(f"uranium/5.0.0@ultimaker/testing")
-        self.requires(f"curaengine/5.0.0@ultimaker/testing")
-        self.requires(f"fdm_materials/5.0.0@ultimaker/testing")
+        self.requires(f"charon/[~=5.0.0-a]@ultimaker/testing")
+        self.requires(f"pynest2d/[~=5.0.0-a]@ultimaker/testing")
+        self.requires(f"savitar/[~=5.0.0-a]@ultimaker/testing")
+        self.requires(f"uranium/[~=5.0.0]@ultimaker/testing")
+        self.requires(f"curaengine/[~=5.0.0-a]@ultimaker/testing")
+        self.requires(f"fdm_materials/[~=5.0.0-a]@ultimaker/testing")
 
     def build(self):
         cmake = CMake(self)
