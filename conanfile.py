@@ -8,11 +8,11 @@ from conan.tools.cmake import CMakeToolchain, CMakeDeps, CMake
 from conan.tools.layout import cmake_layout
 from conans import ConanFile, tools
 
-required_conan_version = ">=1.42"
+required_conan_version = ">=1.44.1"
 
 
 class CuraConan(ConanFile):
-    name = "Cura"
+    name = "cura"
     version = "5.0.0"
     license = "LGPL-3.0"
     author = "Ultimaker B.V."
@@ -64,7 +64,7 @@ class CuraConan(ConanFile):
         "url": "auto",
         "revision": "auto"
     }
-    build_requires = ["Python/3.8.10@python/stable"]
+    build_requires = ["python/3.10@python/stable"]
 
     def layout(self):
         cmake_layout(self)
@@ -101,7 +101,7 @@ class CuraConan(ConanFile):
             shutil.copy(curaengine_src, curaengine_dst)
 
         tc = CMakeToolchain(self)
-        tc.variables["Python_VERSION"] = self.dependencies["Python"].ref.version
+        tc.variables["Python_VERSION"] = self.dependencies["python"].ref.version
         tc.variables["URANIUM_DIR"] = os.path.join(self.dependencies["uranium"].package_folder, "")
         tc.generate()
 
@@ -143,7 +143,7 @@ class CuraConan(ConanFile):
         shutil.copy(curaversion_src, curaversion_dst)
 
     def requirements(self):
-        self.requires(f"Python/3.8.10@python/stable")
+        self.requires(f"python/3.10@python/stable")
         self.requires(f"charon/[~=5.0.0-a]@ultimaker/testing")
         self.requires(f"pynest2d/[~=5.0.0-a]@ultimaker/testing")
         self.requires(f"savitar/[~=5.0.0-a]@ultimaker/testing")
