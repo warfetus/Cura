@@ -64,7 +64,7 @@ class CuraConan(ConanFile):
         "url": "auto",
         "revision": "auto"
     }
-    build_requires = ["python/3.10.0@python/stable"]
+    build_requires = ["python/3.10.2@python/stable"]
 
     def layout(self):
         cmake_layout(self)
@@ -143,7 +143,7 @@ class CuraConan(ConanFile):
         shutil.copy(curaversion_src, curaversion_dst)
 
     def requirements(self):
-        self.requires(f"python/3.10.0@python/stable")
+        self.requires(f"python/3.10.2@python/stable")
         self.requires(f"charon/[~=5.0.0-a]@ultimaker/testing")
         self.requires(f"pynest2d/[~=5.0.0-a]@ultimaker/testing")
         self.requires(f"savitar/[~=5.0.0-a]@ultimaker/testing")
