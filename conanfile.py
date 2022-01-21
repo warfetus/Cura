@@ -51,12 +51,16 @@ class CuraConan(ConanFile):
     options = {
         "enterprise": [True, False],
         "staging": [True, False],
-        "external_engine": [True, False]
+        "external_engine": [True, False],
+        "testing": [True, False],
+        "devtools": [True, False]
     }
     default_options = {
         "enterprise": False,
         "staging": False,
-        "external_engine": False
+        "external_engine": False,
+        "testing": False,
+        "devtools": False
     }
     scm = {
         "type": "git",
@@ -65,6 +69,27 @@ class CuraConan(ConanFile):
         "revision": "auto"
     }
     build_requires = ["python/3.10.2@python/stable"]
+
+    def requirements(self):
+        self.requires("python/3.10.2@python/stable")
+        self.requires("charon/[~=5.0.0-a]@ultimaker/testing")
+        self.requires("pynest2d/[~=5.0.0-a]@ultimaker/testing")
+        self.requires("savitar/[~=5.0.0-a]@ultimaker/testing")
+        self.requires("uranium/[~=5.0.0-a]@ultimaker/testing")
+        self.requires("curaengine/[~=5.0.0-a]@ultimaker/testing")
+        self.requires("fdm_materials/[~=5.0.0-a]@ultimaker/testing")
+        self.requires("numpy/1.21.5@python/stable")
+        self.requires("pyqt5/5.15.2@python/stable")
+        self.requires("sentry-sdk/0.13.5@python/stable")
+        self.requires("trimesh/3.9.36@python/stable")
+        self.requires("certifi/2019.11.28@python/stable")
+        self.requires("keyring/23.0.1@python/stable")
+        self.requires("pyserial/3.4@python/stable")
+        self.requires("zeroconf/0.31.0@python/stable")
+        if self.options.testing:
+            self.requires("pytest/5.2.1@python/stable")
+        if self.options.devtools:
+            self.requires("mypy/0.740@python/stable")
 
     def layout(self):
         cmake_layout(self)
@@ -111,8 +136,7 @@ class CuraConan(ConanFile):
         # Create the Virtual environment
         vb = self.python_requires["VirtualEnvironmentBuildTool"].module.VirtualEnvironmentBuildTool(self)
         vb.configure(os.path.join(self.dependencies["python"].package_folder, self.dependencies["python"].cpp_info.bindirs[0], "python3"))
-        # FIXME: create propper deps
-        vb.generate(pip_deps = "numpy==1.21.5 scipy==1.7.3 shapely==1.7.1 appdirs==1.4.3 certifi==2019.11.28 cffi==1.14.1 chardet==3.0.4 cryptography==3.4.6 decorator==4.4.0 idna==2.8 importlib-metadata==3.7.2 netifaces==0.10.9 networkx==2.3 numpy-stl==2.10.1 packaging==18.0 pycollada==0.6 pycparser==2.19 pyparsing==2.4.2 PyQt5==5.15.4 pyserial==3.4 python-dateutil==2.8.0 python-utils==2.3.0 requests==2.22.0 sentry-sdk==0.13.5 six==1.12.0 trimesh==3.2.33 twisted==21.2.0 urllib3==1.25.8 zeroconf==0.31.0 keyring==23.0.1")
+        vb.generate(pip_deps = "")
 
         # create the pycharm run configurations
         pb = self.python_requires["PyCharmRunEnvironment"].module.PyCharmRunEnvironment(self)
@@ -141,15 +165,6 @@ class CuraConan(ConanFile):
         if curaversion_dst.exists():
             os.remove(curaengine_dst)
         shutil.copy(curaversion_src, curaversion_dst)
-
-    def requirements(self):
-        self.requires(f"python/3.10.2@python/stable")
-        self.requires(f"charon/[~=5.0.0-a]@ultimaker/testing")
-        self.requires(f"pynest2d/[~=5.0.0-a]@ultimaker/testing")
-        self.requires(f"savitar/[~=5.0.0-a]@ultimaker/testing")
-        self.requires(f"uranium/[~=5.0.0-a]@ultimaker/testing")
-        self.requires(f"curaengine/[~=5.0.0-a]@ultimaker/testing")
-        self.requires(f"fdm_materials/[~=5.0.0-a]@ultimaker/testing")
 
     def build(self):
         cmake = CMake(self)
