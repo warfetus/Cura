@@ -93,6 +93,7 @@ class CuraConan(ConanFile):
 
     def layout(self):
         cmake_layout(self)
+        self.folders.imports = "venv"
         self.folders.generators = "venv"
 
     def generate(self):
@@ -111,20 +112,6 @@ class CuraConan(ConanFile):
         cmake = CMakeDeps(self)
         cmake.generate()
 
-        # Make sure CuraEngine exist at the root
-        ext = ""
-        if self.settings.os == "Windows":
-            ext = ".exe"
-        curaengine_src = pathlib.Path(os.path.join(self.dependencies['curaengine'].package_folder, self.dependencies["curaengine"].cpp_info.bindirs[0], f"CuraEngine{ext}"))
-        curaengine_dst = pathlib.Path(os.path.join(self.base_path, f"CuraEngine{ext}"))
-        if os.path.exists(curaengine_dst):
-            os.remove(curaengine_dst)
-        try:
-            curaengine_dst.symlink_to(curaengine_src)
-        except OSError as e:
-            self.output.warn("Could not create symlink to CuraEngine copying instead")
-            shutil.copy(curaengine_src, curaengine_dst)
-
         tc = CMakeToolchain(self)
         tc.variables["Python_VERSION"] = self.dependencies["python"].ref.version
         tc.variables["URANIUM_DIR"] = os.path.join(self.dependencies["uranium"].package_folder, "")
@@ -142,28 +129,12 @@ class CuraConan(ConanFile):
         pb = self.python_requires["PyCharmRunEnvironment"].module.PyCharmRunEnvironment(self)
         pb.generate(env)
 
-        # Install materials
-        materials_src = pathlib.Path(os.path.join(self.dependencies['fdm_materials'].package_folder, self.dependencies["fdm_materials"].cpp_info.resdirs[0], "fdm_materials"))
-        materials_dst = pathlib.Path(os.path.join(self.base_path, "resources", "materials", "fdm_materials"))
-        material_root = os.path.join(self.base_path, "resources", "materials")
-        os.makedirs(material_root, exist_ok = True)
-        if os.path.exists(materials_dst):
-            if materials_dst.is_symlink():
-                os.remove(materials_dst)
-            else:
-                materials_dst.rmdir()
-        try:
-            materials_dst.symlink_to(materials_src)
-        except OSError as e:
-            self.output.warn("Could not create symlink to fdm_materials copying instead")
-            shutil.copy(materials_src, materials_dst)
-
         # Install CuraVersion.py
         curaversion_src = pathlib.Path(os.path.join(self.base_path, ".conan_gen", "CuraVersion.py"))
         curaversion_dst = pathlib.Path(os.path.join(self.base_path, "cura", "CuraVersion.py"))
 
         if curaversion_dst.exists():
-            os.remove(curaengine_dst)
+            os.remove(curaversion_dst)
         shutil.copy(curaversion_src, curaversion_dst)
 
     def build(self):
@@ -171,3 +142,9 @@ class CuraConan(ConanFile):
         cmake.configure()
         cmake.build()
         cmake.install()
+
+    def imports(self):
+        v = tools.Version(self.dependencies["python"].ref.version)
+        self.copy("*", dst = os.path.join("lib", f"python{v.major}.{v.minor}", "site-packages"), src = os.path.join("lib", f"python{v.major}.{v.minor}", "site-packages"))
+        self.copy("CuraEngine*", dst = "..", src = "bin", root_package = "curaengine")
+        self.copy("*.fdm_material", dst = os.path.join("..", "resources", "materials"), src = "res", root_package = "fdm_materials")
