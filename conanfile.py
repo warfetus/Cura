@@ -73,7 +73,7 @@ class CuraConan(ConanFile):
     def requirements(self):
         self.requires("python/3.10.2@python/stable")
         self.requires("charon/[~=5.0.0-a]@ultimaker/testing")
-        self.requires("pynest2d/[~=5.0.0-a]@ultimaker/testing")
+        self.requires("pynest2d/5.0.0-a+7924.d455d4@ultimaker/testing")
         self.requires("pysavitar/5.0.0@ultimaker/testing")
         self.requires("pyarcus/5.0.0@ultimaker/testing")
         self.requires("uranium/5.0.0-a+PyQt6_upgrade.956253@ultimaker/testing")
