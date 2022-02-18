@@ -1,5 +1,5 @@
-# Copyright (c) 2021 Ultimaker B.V.
-# Cura is released under the terms of the LGPLv3 or higher.
+#  Copyright (c) 2021-2022 Ultimaker B.V.
+#  Cura is released under the terms of the LGPLv3 or higher.
 
 import numpy
 from string import Formatter
@@ -7,7 +7,7 @@ from enum import IntEnum
 import time
 from typing import Any, cast, Dict, List, Optional, Set
 import re
-import Arcus #For typing.
+import pyArcus as Arcus  #For typing.
 from PyQt6.QtCore import QCoreApplication
 
 from UM.Job import Job
