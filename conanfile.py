@@ -75,6 +75,7 @@ class CuraConan(ConanFile):
         self.requires("charon/[~=5.0.0-a]@ultimaker/testing")
         self.requires("pynest2d/[~=5.0.0-a]@ultimaker/testing")
         self.requires("pysavitar/5.0.0@ultimaker/testing")
+        self.requires("pyarcus/5.0.0@ultimaker/testing")
         self.requires("uranium/5.0.0-a+PyQt6_upgrade.956253@ultimaker/testing")
         self.requires("curaengine/5.0.0-a+b2fe81@ultimaker/testing")
         self.requires("fdm_materials/[~=5.0.0-a]@ultimaker/testing")
