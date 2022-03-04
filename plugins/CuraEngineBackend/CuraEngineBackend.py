@@ -31,7 +31,10 @@ from cura.Utils.Threading import call_on_qt_thread
 from .ProcessSlicedLayersJob import ProcessSlicedLayersJob
 from .StartSliceJob import StartSliceJob, StartJobResult
 
+import sys
+print("About to import pyArcus", file = sys.stderr)
 import pyArcus as Arcus
+print("Completed importing pyArcus", file = sys.stderr)
 
 if TYPE_CHECKING:
     from cura.Machines.Models.MultiBuildPlateModel import MultiBuildPlateModel

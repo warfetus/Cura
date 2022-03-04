@@ -15,7 +15,10 @@ from cura.Snapshot import Snapshot
 
 from PyQt6.QtCore import QBuffer
 
+import sys
+print("About to import pySavitar", file = sys.stderr)
 import pySavitar as Savitar
+print("Completed importing pySavitar", file = sys.stderr)
 
 import numpy
 import datetime

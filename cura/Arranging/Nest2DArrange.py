@@ -2,7 +2,10 @@
 # Cura is released under the terms of the LGPLv3 or higher.
 
 import numpy
+import sys
+print("About to import pynest2d", file = sys.stderr)
 from pynest2d import Point, Box, Item, NfpConfig, nest
+print("Completed importing pynest2d", file = sys.stderr)
 from typing import List, TYPE_CHECKING, Optional, Tuple
 
 from UM.Application import Application

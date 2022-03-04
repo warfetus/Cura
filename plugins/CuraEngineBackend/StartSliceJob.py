@@ -7,7 +7,10 @@ from enum import IntEnum
 import time
 from typing import Any, cast, Dict, List, Optional, Set
 import re
+import sys
+print("About to import pyArcus", file = sys.stderr)
 import pyArcus as Arcus  # For typing.
+print("Completed importing pyArcus", file = sys.stderr)
 from PyQt6.QtCore import QCoreApplication
 
 from UM.Job import Job

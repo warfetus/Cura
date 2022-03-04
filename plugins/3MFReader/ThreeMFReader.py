@@ -5,7 +5,10 @@ import os.path
 import zipfile
 from typing import List, Optional, Union, TYPE_CHECKING, cast
 
+import sys
+print("About to import pySavitar", file = sys.stderr)
 import pySavitar as Savitar
+print("Completed importing pySavitar", file = sys.stderr)
 import numpy
 
 from UM.Logger import Logger
